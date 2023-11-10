@@ -3,12 +3,49 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.CourseMapper">
-    <resultMap type="com.example.entity.Course" id="courseMap">
-        <id column="ID" property="id"/>
-        <result column="NAME" property="name"/>
-    </resultMap>
+	<resultMap type="com.example.entity.Course" id="courseMap">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+	</resultMap>
 
-    <select id="findAll" resultMap="courseMap">
-        SELECT * FROM COURSES
-    </select>
+<!--	<select id="findAll" resultMap="courseMap">-->
+<!--		SELECT * FROM COURSES-->
+<!--	</select>-->
+
+<!--lesson02 -->
+	<!--新規登録 -->
+	<insert id="insert" useGeneratedKeys="true" keyColumn="ID"
+		keyProperty="id">
+		INSERT INTO COURSES (ID, NAME) VALUES (COURSE_ID_SEQ.nextval, #{name})
+	</insert>
+
+	<select id="findById" resultMap="courseMap">
+		SELECT * FROM COURSES WHERE ID = #{id}
+	</select>
+
+	<!--更新 -->
+	<update id="update">
+		UPDATE COURSES SET NAME = #{name} WHERE ID = #{id}
+	</update>
+
+	<!--削除 -->
+	<delete id="deleteById">
+		DELETE FROM COURSES WHERE ID = #{id}
+	</delete>
+
+	<!--条件検索-->
+	<select id="findAll" resultMap="courseMap">
+		SELECT
+		*
+		FROM
+		COURSES
+		<where>
+			<if test="courseId != null">
+				ID = #{courseId}
+			</if>
+			<if test="courseName != null">
+				OR NAME = #{courseName}
+			</if>
+		</where>
+	</select>
 </mapper>
